@@ -63,10 +63,7 @@ func isValid(str string) bool {
 			return false
 		}
 		marker := logLine[2]
-		if !isFound(statusMarkers, marker) {
-			return false
-		}
-		return true
+		return isFound(statusMarkers, marker)
 	}
 	return false
 }
