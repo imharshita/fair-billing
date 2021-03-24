@@ -40,12 +40,18 @@ func main() {
 	fileName = filepath.FromSlash(fileName)
 	file, err := os.Open(fileName)
 	if err != nil {
-		fmt.Fprintln(out, err)
+		if pErr, ok := err.(*os.PathError); ok {
+			fmt.Fprintln(out, "Failed to open file at path", pErr.Path)
+			os.Exit(1)
+		}
+		fmt.Fprintln(out, "Generic error", err)
+		os.Exit(1)
 	}
 	defer file.Close()
 	keys, report, err := billing.Process(file)
 	if err != nil {
 		fmt.Fprintln(out, err)
+		os.Exit(1)
 	} else {
 		for _, k := range keys {
 			value := report[k]
